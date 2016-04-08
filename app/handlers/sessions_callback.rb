@@ -40,7 +40,7 @@ class SessionsCallback
     true
   end
 
-  def handle
+  def handle#; debugger
     authentication =
       Authentication.find_or_create_by_provider_and_uid(@data.provider, @data.uid.to_s)
     authentication_user = authentication.user
@@ -99,7 +99,7 @@ class SessionsCallback
 
   def sign_in!(user)
     if user.is_unclaimed?
-      run(ActivateUnclaimedUser, user)
+      run(ActivateUnclaimedUser, user)  # TODO make sure this still appropriate
     end
     @user_state.sign_in!(user)
   end

@@ -31,4 +31,9 @@ class SignupController < ApplicationController
     end
   end
 
+  def invited
+    # debugger
+    password
+  end
+
 end

@@ -32,8 +32,14 @@ ActionController::Base.class_exec do
 
   def finish_sign_up
     return true if request.format != :html
-    return unless current_user.is_new_social?
-    redirect_to signup_social_path
+
+    if current_user.is_new_social?
+      redirect_to signup_social_path
+    elsif current_user.is_unclaimed?
+      redirect_to signup_invited_path
+    else
+      return
+    end
   end
 
   def expired_password

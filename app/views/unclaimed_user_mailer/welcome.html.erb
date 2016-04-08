@@ -4,6 +4,6 @@
 
 <p>Please click the link below to complete the sign up process.</p>
 
-<%= confirm_unclaimed_url(code: @email_address.confirmation_code) %>
+<%= link_to "Join OpenStax", confirm_unclaimed_url(code: @email_address.confirmation_code) %>
 
 <%= render :partial => 'shared/email_closing' %>

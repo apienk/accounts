@@ -132,6 +132,8 @@ GEM
     jwt (1.2.0)
     keyword_search (1.5.0)
     kgio (2.9.2)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     lev (2.0.6)
       actionpack (>= 3.0)
       active_attr
@@ -371,6 +373,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   keyword_search (~> 1.5.0)
+  launchy
   lev (~> 2.0.6)
   lograge
   maruku

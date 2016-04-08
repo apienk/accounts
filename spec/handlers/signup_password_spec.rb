@@ -31,7 +31,7 @@ describe SignupPassword do
     end
 
     it "has errors for [:signup, :password]" do
-      outcome = the_call.call
+      outcome = the_call.call; debugger
       expect(outcome.errors).to have_offending_input(:signup)
       expect(outcome.errors).to have_offending_input(:password)
     end

@@ -41,6 +41,7 @@ Accounts::Application.routes.draw do
     get 'password'
     get 'social'
     post 'social'
+    get 'invited'
   end
 
   resource :identity, only: :update

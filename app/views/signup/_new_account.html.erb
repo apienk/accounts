@@ -1,6 +1,7 @@
 <% @parent_col_id = "sign-up" %>
 
-<% is_social_signup = signed_in? %>
+<% is_social_signup = :social == type %>
+<% is_password_signup = :password == type %>
 
 <%= lev_form_for :signup, url: url, html: {id: 'signup'} do |f| %>
 
@@ -8,7 +9,10 @@
 
     <div class="col-sm-6">
       <% user = signed_in? ? current_user : OpenStruct.new %>
-      <% email = user.email_addresses.try(:first).try(:value) %>
+
+      <% email_address = user.email_addresses.try(:first) %>
+      <% is_email_verified = email_address.try(:verified) || false %>
+      <% email = email_address.try(:value) %>
 
       <%= standard_field form: f, name: :title, type: :text_field, label: "Title",
                          options: {value: user.title, hide: true} %>
@@ -20,7 +24,7 @@
       <%= standard_field form: f, name: :suffix, type: :text_field, label: "Suffix",
                          options: {value: user.suffix, hide: true} %>
       <%= standard_field form: f, name: :email_address, type: :text_field, label: "Email Address *",
-                         options: {value: email, disabled: email.present?} %>
+                         options: {value: email, disabled: is_email_verified} %>
       <%= standard_field form: f, name: :username, type: :text_field, label: "Username *",
                          options: {value: user.username} %>
 
@@ -52,7 +56,7 @@
 
           <%= link_to "Take me back to the sign in page.", signout_path %>
         </div>
-      <% else %>
+      <% elsif is_password_signup %>
         <div class="verify-email well">
           <span class="title">Please verify your email!</span>
 
@@ -92,17 +96,17 @@
   </div>
 
   <div class="signup row">
-
     <div class="col-sm-6 buttons">
-
-
       <div>
         <%= f.submit "Create Account", id: "create_account_submit", class: 'btn btn-primary' %>
-        <%= link_to "Cancel", (is_social_signup ? signout_path : root_path), class: 'btn btn-default pull-right' %>
+
+        <% if is_social_signup || is_password_signup %>
+          <%= link_to "Cancel",
+                      (is_social_signup ? signout_path : root_path),
+                      class: 'btn btn-default pull-right' %>
+        <% end %>
       </div>
-
     </div>
-
   </div>
 
 <% end %>

@@ -65,7 +65,7 @@ module OmniAuth
         end
       end
 
-      def handle_signup
+      def handle_signup  # TODO need a SignupInvited handler, different handle_ method, different other_phase behavior
         @handler_result =
           SignupPassword.handle(
             params: request,

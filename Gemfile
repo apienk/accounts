@@ -68,6 +68,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'capybara-email'
+  gem 'launchy'
   gem 'poltergeist'
   gem 'coveralls', require: false
   gem 'test-unit' # because rspec told me so

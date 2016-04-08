@@ -1,0 +1,8 @@
+<% @hide_session_info = true %>
+
+<% page_heading 'Thanks for accepting an invitation to join OpenStax!' %>
+
+<p>Create your account by completing the fields below.</p>
+
+<%= render partial: 'new_account', locals: { url: '/auth/identity/signup',
+                                             type: :invited } %>

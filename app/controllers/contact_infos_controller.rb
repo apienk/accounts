@@ -4,7 +4,7 @@ class ContactInfosController < ApplicationController
                      only: [:confirm, :confirm_unclaimed, :resend_confirmation]
 
   skip_before_filter :finish_sign_up,
-                     only: [:confirm_unclaimed] # TODO still need this skip?
+                     only: [:confirm_unclaimed]
 
   fine_print_skip :general_terms_of_use, :privacy_policy,
                   only: [:create, :destroy, :set_searchable, :confirm,
@@ -61,9 +61,13 @@ class ContactInfosController < ApplicationController
   end
 
   def confirm_unclaimed
+    # Capybara.default_wait_time = 1000
     handle_with(ConfirmUnclaimedAccount,
-                complete: lambda {
-                  render :confirm_unclaimed, status: @handler_result.errors.any? ? 400 : 200
+                user_state: self,
+                success: lambda { #debugger;
+                  redirect_to signup_invited_path },
+                failure: lambda {
+                  render :confirm_unclaimed, status: 200
                 })
   end
 

@@ -43,6 +43,10 @@ class AnonymousUser
     false
   end
 
+  def is_unclaimed?
+    false
+  end
+
   def applications
     []
   end
