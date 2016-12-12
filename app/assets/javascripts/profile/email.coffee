@@ -9,7 +9,8 @@ class Email
     this.$el = $(@el)
     @id = this.$el.attr('data-id')
     this.$el.find('.searchable').change(@saveSearchable)
-    this.$el.find('.verify').click(@sendVerification)
+    this.$el.find('.resend-confirmation').click(@sendVerification)
+    this.$el.find('.email').click(@toggleProperties)
     @update()
 
   update: ->
@@ -18,6 +19,9 @@ class Email
       delBtn.hide()
     else
       delBtn.click(@confirmDelete)
+
+  toggleProperties: ->
+    this.$el.toggleClass('expanded')
 
   toggleSpinner: (show) ->
     this.$el.find('.spinner').toggle(_.isBoolean(show) and show)
@@ -93,9 +97,8 @@ OX.Profile.Email = {
 
   onAddEmail: ->
     email = $('#email-template').children().clone().addClass('new')
-    input = $(email).insertBefore(@addEmail).find('.email')
+    input = $(email).insertBefore(@addEmail).find('.email .value')
     @addEmail.hide()
-
     input.editable(
       url: BASE_URL
       params: (params) ->

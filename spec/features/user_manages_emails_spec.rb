@@ -27,9 +27,11 @@ feature 'User manages emails', js: true do
       within(:css, '.email-entry.new') {
         find('input').set('user@mysite.com')
         find('.glyphicon-ok').click
+        wait_for_ajax
+        find(".unconfirmed-warning").click
       }
       expect(page).to have_no_missing_translations
-      expect(page).to have_button(t :"users.edit.click_to_verify")
+      expect(page).to have_button(t :"users.edit.resend_confirmation")
       expect(page).to have_content('user@mysite.com')
     end
 
@@ -44,11 +46,12 @@ feature 'User manages emails', js: true do
       original_link_path = get_path_from_absolute_link(current_email, 'a')
 
       expect(page).to have_no_missing_translations
-      expect(page).to have_button(t :"users.edit.click_to_verify")
-      click_button(t :"users.edit.click_to_verify")
-
+      within all(".email-entry").last do
+        find(".unconfirmed-warning").click
+        expect(page).to have_button(t :"users.edit.resend_confirmation")
+        click_button(t :"users.edit.resend_confirmation")
+      end
       visit(original_link_path)
-
       expect(page).to have_content(t :"contact_infos.confirm.page_heading.success")
     end
 
@@ -68,6 +71,13 @@ feature 'User manages emails', js: true do
         find('.glyphicon-ok').click
       }
       expect(page).to have_content('Value "user" is not a valid email address')
+    end
+
+    scenario 'toggles searchable field' do
+      expect(page).to_not have_content(t('users.edit.searchable'))
+      find(".email-entry[data-id=\"#{user.id}\"] .email").click
+      expect(page).to have_content(t('users.edit.searchable'))
+      screenshot!
     end
 
   end
@@ -119,10 +129,11 @@ feature 'User manages emails', js: true do
     let(:unverified_emails) { ['user@unverified.com'] }
 
     scenario 'success' do
-      click_button (t :"users.edit.click_to_verify")
+      find(".email-entry[data-id=\"#{user.id}\"] .value").click
+      click_button (t :"users.edit.resend_confirmation")
       expect(page).to have_no_missing_translations
       expect(page).to have_content(t :"controllers.contact_infos.verification_sent", address: "user@unverified.com")
-      expect(page).to have_button((t :"users.edit.click_to_verify"), disabled: true)
+      expect(page).to have_button((t :"users.edit.resend_confirmation"), disabled: true)
     end
   end
 
